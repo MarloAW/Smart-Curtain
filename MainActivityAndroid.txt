@@ -1,0 +1,65 @@
+package com.example.rullgardin
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.util.Log
+import android.widget.Button
+import android.widget.TextView
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val upText = findViewById<TextView>(R.id.upText)
+        val upButton = findViewById<Button>(R.id.upButton)
+
+        val downText = findViewById<TextView>(R.id.downText)
+        val downButton = findViewById<Button>(R.id.downButton)
+
+        // Instantiate the RequestQueue.
+        val queue = Volley.newRequestQueue(this)
+        val urlup = "http://ip_adress/off"
+        val urldown = "http://ip_adress/on"
+
+        // Request a string response from the provided URL.
+        val upRequest = StringRequest(
+            Request.Method.POST, urlup,
+            Response.Listener<String> { response ->
+                // Display the first 500 characters of the response string.
+                upText.text = "Response is: ${response}"
+            },
+            Response.ErrorListener { error ->
+                upText.text = "That didn't work!"
+                Log.d("Error.Response", error.toString())
+            })
+        // Request a string response from the provided URL.
+        val downRequest = StringRequest(
+            Request.Method.POST, urldown,
+            Response.Listener<String> { response ->
+                // Display the first 500 characters of the response string.
+                downText.text = "Response is: ${response}"
+            },
+            Response.ErrorListener { error ->
+                downText.text = "That didn't work!"
+                Log.d("Error.Response", error.toString())
+            })
+
+        // Add the request to the RequestQueue.
+        upButton.setOnClickListener {
+            queue.add(upRequest)
+            upText.text = "Up movement done"
+        }
+
+        // Add the request to the RequestQueue.
+        downButton.setOnClickListener {
+            queue.add(downRequest)
+            downText.text = "Down movement done"
+        }
+    }
+}

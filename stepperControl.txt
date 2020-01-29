@@ -1,0 +1,82 @@
+#include <ESP8266WiFi.h>
+#include <WiFiClient.h>
+#include <ESP8266WiFiMulti.h> 
+#include <ESP8266mDNS.h>
+#include <ESP8266WebServer.h>   // Include the WebServer library
+#include <Wire.h>
+
+//////////////////////////////////////////
+//               PWM SIGNAL             //
+//////////////////////////////////////////
+// Define pwm signal pins on the arduino and initiate step time
+// 16=D0, 5=D1, 4=D2,0=D3, 2=D4
+#define pwmPin1 D1
+#define pwmPin2 D2
+#define pwmPin3 D3
+#define pwmPin4 D4
+int step_number = 0;
+
+// Function for setting Voltage on the different PWM pins and setting 
+// the rotation direction
+void OneStep(bool dir){
+  if(dir){
+    switch(step_number){
+      case 0:
+      digitalWrite(pwmPin1, HIGH);
+      digitalWrite(pwmPin2, LOW);
+      digitalWrite(pwmPin3, LOW);
+      digitalWrite(pwmPin4, LOW);
+      break;
+      case 1:
+      digitalWrite(pwmPin1, LOW);
+      digitalWrite(pwmPin2, HIGH);
+      digitalWrite(pwmPin3, LOW);
+      digitalWrite(pwmPin4, LOW);
+      break;
+      case 2:
+      digitalWrite(pwmPin1, LOW);
+      digitalWrite(pwmPin2, LOW);
+      digitalWrite(pwmPin3, HIGH);
+      digitalWrite(pwmPin4, LOW);
+      break;
+      case 3:
+      digitalWrite(pwmPin1, LOW);
+      digitalWrite(pwmPin2, LOW);
+      digitalWrite(pwmPin3, LOW);
+      digitalWrite(pwmPin4, HIGH);
+      break;
+    }
+  }
+  else{
+    switch(step_number){
+      case 0:
+      digitalWrite(pwmPin1, LOW);
+      digitalWrite(pwmPin2, LOW);
+      digitalWrite(pwmPin3, LOW);
+      digitalWrite(pwmPin4, HIGH);
+      break;
+      case 1:
+      digitalWrite(pwmPin1, LOW);
+      digitalWrite(pwmPin2, LOW);
+      digitalWrite(pwmPin3, HIGH);
+      digitalWrite(pwmPin4, LOW);
+      break;
+      case 2:
+      digitalWrite(pwmPin1, LOW);
+      digitalWrite(pwmPin2, HIGH);
+      digitalWrite(pwmPin3, LOW);
+      digitalWrite(pwmPin4, LOW);
+      break;
+      case 3:
+      digitalWrite(pwmPin1, HIGH);
+      digitalWrite(pwmPin2, LOW);
+      digitalWrite(pwmPin3, LOW);
+      digitalWrite(pwmPin4, LOW);
+      break;
+    }    
+  }
+  step_number++;
+  if(step_number > 3){
+    step_number = 0;
+  }
+}
